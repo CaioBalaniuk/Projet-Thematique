@@ -1,20 +1,20 @@
-# Pré-processamento — Projet Thématique EEG et IA
+# EEG and AI Thematic Project — Preprocessing
 
-Notebook de pré-processamento de sinais EEG para o projeto temático de EEG e inteligência artificial.
+EEG signal preprocessing notebook for the EEG and Artificial Intelligence thematic project.
 
-## Conteúdo
+## Contents
 
-O notebook `Pré_processamento_Projet_Themátique_EEG_et_IA.ipynb` reúne três etapas:
+The notebook `Pré_processamento_Projet_Themátique_EEG_et_IA.ipynb` covers three main stages:
 
-1. **Exploração dos sinais:** carregamento dos 500 sinais, organização dos conjuntos A–E, criação da estrutura `MNE`, visualizações temporais e análise espectrale de amplitude.
-2. **Filtragem e divisão dos dados:** aplicação de um filtro Butterworth passa-baixas de 40 Hz (ordem 4, fase zero com `filtfilt`), verificações da filtragem e divisão treino/teste com validação cruzada estratificada.
-3. **Janelamento e normalização:** criação de janelas, normalização sem vazamento de dados (*data leakage*), preparação de `Dataset`/`DataLoader` do PyTorch e agregação das previsões por sinal.
+1. **Signal Exploration:** loading the 500 EEG signals, organizing datasets A–E, creating the MNE data structure, visualizing signals in the time domain, and performing spectral amplitude analysis.
+2. **Filtering and Data Splitting:** applying a 40 Hz low-pass Butterworth filter (4th order, zero-phase filtering using `filtfilt`), validating the filtering process, and splitting the data into training and test sets using stratified cross-validation.
+3. **Windowing and Normalization:** creating signal windows, applying normalization while avoiding data leakage, preparing PyTorch `Dataset` and `DataLoader` objects, and aggregating predictions at the signal level.
 
-A divisão dos dados é feita por **sinal inteiro**, antes do janelamento, para evitar que janelas do mesmo sinal apareçam em conjuntos diferentes.
+The dataset is split by **entire EEG signals before windowing**, ensuring that windows from the same signal cannot appear in different subsets.
 
-## Dados necessários
+## Required Data
 
-Os dados brutos não estão incluídos neste repositório. O notebook espera encontrar os arquivos `.txt` do conjunto Bonn nesta estrutura do Google Drive:
+The raw data is not included in this repository. The notebook expects the Bonn EEG dataset `.txt` files to be organized in the following Google Drive structure:
 
 ```text
 MyDrive/
@@ -29,48 +29,48 @@ MyDrive/
     └── figuras/
 ```
 
-Cada uma das cinco pastas `A (Z)` a `E (S)` deve conter 100 arquivos `.txt`.
+Each of the five folders, from `A (Z)` to `E (S)`, must contain 100 `.txt` files.
 
-> **Importante:** o caminho está definido no notebook como `/content/drive/MyDrive/Projet Thématique/raw`. Se o nome ou a localização da pasta no seu Google Drive for diferente, ajuste a variável `path` na primeira etapa.
+> **Important:** The notebook uses the following path: `/content/drive/MyDrive/Projet Thématique/raw`. If the folder name or location in your Google Drive is different, update the `path` variable in the first stage.
 
-## Como executar no Google Colab
+## How to Run in Google Colab
 
-1. Abra o notebook no Google Colab.
-2. Coloque a pasta `Projet Thématique` no diretório `MyDrive` do Google Drive, respeitando a estrutura indicada acima.
-3. Execute as células em ordem. A primeira etapa monta o Google Drive.
-4. Caso necessário, instale as dependências:
+1. Open the notebook in Google Colab.
+2. Place the `Projet Thématique` folder inside your Google Drive's `MyDrive` directory, following the structure described above.
+3. Run the notebook cells in order. The first stage mounts Google Drive.
+4. If necessary, install the dependencies:
 
    ```python
    %pip install -r requirements.txt
    ```
 
-   Se o arquivo `requirements.txt` não estiver acessível no ambiente do Colab, instale as bibliotecas diretamente:
+   If the `requirements.txt` file is not accessible in the Colab environment, install the libraries directly:
 
    ```python
    %pip install numpy pandas matplotlib scipy scikit-learn mne torch
    ```
 
-5. Para salvar os resultados processados, altere `SALVAR = True` na célula de parâmetros da terceira etapa. Com `SALVAR = False`, o notebook não grava o arquivo final da terceira etapa.
+5. To save the processed results, set `SALVAR = True` in the parameter cell of the third stage. When `SALVAR = False`, the notebook does not save the final output file from the third stage.
 
-O notebook foi desenvolvido/testado com Python 3.13.18 no ambiente Google Colab. O Colab já fornece a integração `google.colab` usada para montar o Drive.
+The notebook was developed and tested with Python 3.13.18 in Google Colab. Colab already provides the `google.colab` integration used to mount Google Drive.
 
-## Arquivos gerados
+## Generated Files
 
-Quando as células correspondentes são executadas, o notebook cria:
+When the corresponding cells are executed, the notebook generates:
 
-- `figuras/`: gráficos usados para analisar e documentar o pré-processamento.
-- `processado/etapa2_filtrado_split.npz`: sinais filtrados, rótulos, identificadores, índices de treino/teste e folds de validação.
-- `processado/etapa3_janelas.npz`: janelas normalizadas, rótulos, identificadores dos sinais e parâmetros de preparação (quando `SALVAR = True`).
+- `figuras/`: plots used to analyze and document the preprocessing process.
+- `processado/etapa2_filtrado_split.npz`: filtered signals, labels, identifiers, training/test indices, and cross-validation folds.
+- `processado/etapa3_janelas.npz`: normalized windows, labels, signal identifiers, and preprocessing parameters (when `SALVAR = True`).
 
-Esses arquivos são resultados gerados pelo notebook e não precisam ser versionados no GitHub se forem grandes ou puderem ser reproduzidos a partir dos dados brutos.
+These files are generated outputs and do not need to be committed to GitHub if they are large or can be reproduced from the raw data.
 
-## Dependências
+## Dependencies
 
-As bibliotecas Python utilizadas diretamente no notebook estão listadas em [`requirements.txt`](requirements.txt).
+The Python libraries directly used in the notebook are listed in [`requirements.txt`](requirements.txt).
 
-- NumPy e Pandas: manipulação dos dados.
-- Matplotlib: visualização.
-- SciPy: filtragem e análise espectral.
-- scikit-learn: divisão estratificada e validação cruzada.
-- MNE: estruturação e análise dos sinais EEG.
-- PyTorch: `Dataset`, `DataLoader` e testes das entradas das redes neurais.
+- **NumPy and Pandas:** data manipulation.
+- **Matplotlib:** data visualization.
+- **SciPy:** signal filtering and spectral analysis.
+- **scikit-learn:** stratified splitting and cross-validation.
+- **MNE:** EEG signal structuring and analysis.
+- **PyTorch:** `Dataset`, `DataLoader`, and neural network input testing.
